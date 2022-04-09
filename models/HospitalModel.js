@@ -19,11 +19,15 @@ const hospitalSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Details",
     },
-    Otp:{
+    otp:{
       type:String,
     },
     expTime:{
       type: Date,
+    },
+    verified:{
+      type:Boolean,
+      default:false
     },
     isDeleted: {
       type: Boolean,
@@ -36,3 +40,4 @@ const hospitalSchema = new Schema(
 );
 
 export default mongoose.model("Hospital", hospitalSchema);
+

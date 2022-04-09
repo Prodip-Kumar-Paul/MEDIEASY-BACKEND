@@ -20,6 +20,9 @@ const DetailsSchema = new Schema(
     availableOperations: [
       {type:String}
     ],
+    placeId:{
+      type:String
+    },
     EmergencyAvailability: {
       type: Boolean,
     },
@@ -39,6 +42,10 @@ const DetailsSchema = new Schema(
     },
     helpLine: {
       type: String,
+    },
+    verified:{
+      type:Boolean,
+      default:false
     },
     isDeleted: {
       type: Boolean,

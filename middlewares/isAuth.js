@@ -1,34 +1,29 @@
-import jwt from "jsonwebtoken";
+import Jwt from "jsonwebtoken";
 import config from "../config/config";
 
 export const isAuthenticated = async (req, res, next) => {
    try {
-      const authToken = req.get("Authorization");
+      const auth = req.headers.authorization;
 
-      if (!authToken) {
+      if (!auth || !auth.startsWith("Bearer ")) {
          const error = new Error("No authentication token attached");
          error.statusCode = 401;
          throw error;
       }
-
-      const token = authToken.split(" ")[1];
-
-      const { exp } = jwt.decode(token);
-      if (Date.now() >= exp * 1000) {
-         const error = new Error("Token Expired");
-         error.statusCode = 401;
-         throw error;
+      const token = req.get("Authorization").split(" ")[1];
+  
+      const decoded = Jwt.verify(token, config.JWT_ACTIVATE);
+  
+      if (!decoded) {
+        res.status(401).json({
+           status:false,
+           message:"Token expires",
+           data:''
+        })
       }
+      const { hospitalId } = decoded;
+      req.hospitalId = hospitalId;
 
-      const decodedToken = jwt.verify(token, config.JWT_SECRET_KEY);
-      if (!decodedToken) {
-         const error = new Error("Not authenticated");
-         error.statusCode = 401;
-         throw error;
-      }
-      // console.log(decodedToken);
-      req.githubToken = decodedToken.githubToken;
-      req.userType = decodedToken.userType;
       next();
    } catch (err) {
       next(err);
