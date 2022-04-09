@@ -2,7 +2,10 @@ import express from "express";
 import { body } from "express-validator";
 import { errorHandler } from "../utils/errorHandler.js";
 // import { signUpOrLoginController } from "../controllers/authControllers.js";
-import { insertingHospitalDetails } from "../controllers/hospitalDetailsController.js";
+import {
+  insertingHospitalDetails,
+  updatingHospitalDetails,
+} from "../controllers/hospitalDetailsController.js";
 const router = express.Router();
 
 router.post(
@@ -17,5 +20,11 @@ router.post(
   ],
   errorHandler,
   insertingHospitalDetails
+);
+router.post(
+  "/update_hospital_details",
+  [],
+  errorHandler,
+  updatingHospitalDetails
 );
 export default router;
