@@ -5,9 +5,11 @@ const hospitalSchema = new Schema(
   {
     hospitalEmail: {
       type: String,
+      default:"",
     },
     location: {
       type: Object,
+      default:"",
     },
     hospitalPassword: {
       type: String,
