@@ -9,14 +9,14 @@ export const getDetailsByPlaceId = async (req, res, next) => {
     const { placeId } = req.params;
     const hospital = await Details.find({ placeId }).lean();
     if (hospital.length) {
-      res.status(200).json({
+      return res.status(200).json({
         status: true,
         message: "Hospital Details",
         data: hospital[0],
       });
     } else {
-      res.status(400).json({
-        status: false,
+      return res.status(200).json({
+        status: true,
         message: "Hospital not found",
       });
     }
