@@ -7,7 +7,14 @@ import {
 } from "../controllers/hospitalControllers.js";
 const router = express.Router();
 
-router.get("/available", errorHandler, getAvailableHospitals);
+router.post(
+  "/available",
+  [body("lat").notEmpty().withMessage("Invalid latitude")],
+  [body("lon").notEmpty().withMessage("Invalid longitude")],
+  [body("radius").notEmpty().withMessage("Invalid radius")],
+  errorHandler,
+  getAvailableHospitals
+);
 router.get(
   "/:placeId",
   errorHandler,
