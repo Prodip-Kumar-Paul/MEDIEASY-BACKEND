@@ -1,4 +1,5 @@
-import Hospital from "../models/DetailsModel.js";
+import Hospital from "../models/HospitalModel.js";
+import Details from "../models/DetailsModel.js";
 import config from "../config/config.js";
 import apis from "../utils/apis.js";
 import axios from "axios";
@@ -6,7 +7,7 @@ import axios from "axios";
 export const getDetailsByPlaceId = async (req, res, next) => {
   try {
     const { placeId } = req.params;
-    const hospital = await Hospital.find({ placeId }).lean();
+    const hospital = await Details.find({ placeId }).lean();
     if (hospital.length) {
       res.status(200).json({
         status: true,
@@ -31,6 +32,7 @@ export const getDetailsByPlaceId = async (req, res, next) => {
 export const getAvailableHospitals = async (req, res, next) => {
   try {
     const { lat, lon, radius } = req.body;
+    console.log(lat, lon, radius, config.LOCALIQ_API_KEY);
     try {
       const hospitals = await axios.get(
         `https://us1.locationiq.com/v1/nearby.php?key=${config.LOCALIQ_API_KEY}&lat=${lat}&lon=${lon}&radius=${radius}&tag=hospital`
@@ -41,9 +43,9 @@ export const getAvailableHospitals = async (req, res, next) => {
       hospitals.data.map(async (hospital) => {
         const { place_id } = hospital;
         try {
-          const getHospitalByPlaceId = await Hospital.findOne({
+          const getHospitalByPlaceId = await Details.findOne({
             placeId: place_id,
-          });
+          }).populate("hospitalId");
           if (getHospitalByPlaceId)
             getAvailableHospitalsObj.push(getHospitalByPlaceId);
           getUnavailableHospitals.push(getHospitalByPlaceId);

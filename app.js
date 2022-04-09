@@ -18,7 +18,7 @@ const __dirname = dirname(__filename);
 import testApis from "./apis/testApis.js";
 import authApis from "./apis/authApis.js";
 import hospitalApis from "./apis/hospitalApis.js";
-
+import thirdPartyApis from "./apis/thirdPartyApis.js";
 
 //app  and middleware
 const app = express();
@@ -75,6 +75,7 @@ app.use(limiter);
 app.use("/api/v1/test", testApis);
 app.use("/api/v1/auth", authApis);
 app.use("/api/v1/hospital", hospitalApis);
+app.use("/api/v1/thirdPartyApi", thirdPartyApis);
 
 // ERROR HANDLING MIDDLEWARE
 app.use(globalErrorHandler);
