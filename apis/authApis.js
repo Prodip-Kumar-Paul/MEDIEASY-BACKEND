@@ -6,6 +6,8 @@ import {
   signupController,
   loginHospital,
   verifyOTP,
+  forgetPassword,
+  forgetPasswordChange,
 } from "../controllers/authControllers.js";
 const router = express.Router();
 
@@ -26,6 +28,22 @@ router.post(
   [body("otp").notEmpty().withMessage("invalid otp")],
   errorHandler,
   verifyOTP
+);
+router.post(
+  "/forget_password",
+  [body("id").notEmpty().withMessage("invalid id")],
+  errorHandler,
+  forgetPassword
+);
+
+router.post(
+  "/forget_password_change",
+  [
+    body("id").notEmpty().withMessage("invalid id"),
+    body("newPassword").isStrongPassword().withMessage("password is weak"),
+  ],
+  errorHandler,
+  forgetPasswordChange
 );
 
 export default router;
