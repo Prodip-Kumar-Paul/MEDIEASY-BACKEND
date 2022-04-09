@@ -4,8 +4,8 @@ import apis from "../utils/apis.js";
 
 export const getDetailsByPlaceId = async (req, res, next) => {
   try {
-    const { place_id } = req.params;
-    const hospital = await Hospital.find({ place_id }).lean();
+    const { placeId } = req.params;
+    const hospital = await Hospital.find({ placeId }).lean();
     if (hospital.length) {
       res.json({
         status: true,

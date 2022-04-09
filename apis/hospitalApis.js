@@ -5,9 +5,9 @@ import { getDetailsByPlaceId } from "../controllers/hospitalControllers.js";
 const router = express.Router();
 
 router.get(
-  "/:place_id",
+  "/:placeId",
   errorHandler,
-  [body("place_id").notEmpty().withMessage("Invalid Place Id")],
+  [body("placeId").notEmpty().withMessage("Invalid Place Id")],
   getDetailsByPlaceId
 );
 
