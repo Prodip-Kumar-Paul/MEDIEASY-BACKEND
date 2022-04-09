@@ -6,7 +6,7 @@ const hospitalSchema = new Schema(
     hospitalEmail: {
       type: String,
     },
-    placeId: { type: Number },
+    placeId: { type: String },
     hospitalNumber: {
       type: Number,
     },

@@ -75,13 +75,13 @@ app.use("/api/v1/test", testApis);
 // app.use("/api/v1/auth", authApis);
 app.use("/api/v1/hospital", hospitalApis);
 
-// EROOR HANDLING MIDDLEWARE
+// ERROR HANDLING MIDDLEWARE
 app.use(globalErrorHandler);
 
 // 404 MIDDLEWARE
 app.use((req, res, next) => {
   res.status(404).json({
-    message: "resourse not found",
+    message: "resource not found",
   });
 });
 
