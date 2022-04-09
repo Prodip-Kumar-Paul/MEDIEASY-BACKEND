@@ -6,6 +6,9 @@ const hospitalSchema = new Schema(
     hospitalEmail: {
       type: String,
     },
+    hospitalNumber: {
+      type: Number,
+    },
     location: {
       type: Object,
     },
@@ -16,15 +19,11 @@ const hospitalSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Details",
     },
-    otp: {
-      type: String,
+    Otp:{
+      type:String,
     },
-    expTime: {
+    expTime:{
       type: Date,
-    },
-    verified: {
-      type: Boolean,
-      default: false,
     },
     isDeleted: {
       type: Boolean,
