@@ -9,13 +9,14 @@ import Jwt from "jsonwebtoken";
 
 export const signupController = async (req, res, next) => {
   try {
-    const { hospitalEmail, hospitalPassword , hospitalConfirmPassword } = req.body;
-    if(hospitalConfirmPassword !== hospitalPassword){
+    const { hospitalEmail, hospitalPassword, hospitalConfirmPassword } =
+      req.body;
+    if (hospitalConfirmPassword !== hospitalPassword) {
       return res.status(401).json({
-        status:false,
-        message:"Confirm password no matched",
-        data:''
-      })
+        status: false,
+        message: "Confirm password no matched",
+        data: "",
+      });
     }
 
     let loginBody = {};
@@ -231,5 +232,43 @@ export const forgetPasswordChange = async (req, res) => {
   } catch (error) {
     console.log(error);
     next(err);
+  }
+};
+
+export const passwordChange = async (req, res, next) => {
+  try {
+    const { id, hospitalPassword, newPassword } = req.body;
+    const hospital = await Hospital.findById(id);
+    if (!hospital)
+      return res.status(406).json({
+        status: false,
+        message: "Hospital not found",
+        data: [],
+      });
+    const matchedPassword = await bcryptJs.compare(
+      hospitalPassword,
+      hospital.hospitalPassword
+    );
+    if (!matchedPassword) {
+      return res.status(406).json({
+        status: false,
+        message: "Invalid Password",
+        data: [],
+      });
+    }
+    const hashedPassword = await bcryptJs.hash(newPassword, 12);
+
+    hospital.hospitalPassword = hashedPassword;
+
+    await hospital.save();
+
+    return res.status(200).json({
+      status: true,
+      message: "Password changed successfully",
+      data: null,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 };
