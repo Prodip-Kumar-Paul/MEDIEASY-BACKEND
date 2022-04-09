@@ -2,7 +2,8 @@ import express from "express";
 import { body } from "express-validator";
 import { errorHandler } from "../utils/errorHandler.js";
 // import { signUpOrLoginController } from "../controllers/authControllers.js";
-import { insertingHospitalDetails } from "../controllers/hospitalDetailsController.js";
+import { insertingHospitalDetails ,getHospitalDetails } from "../controllers/hospitalDetailsController.js";
+import { isAuthenticated } from '../middlewares/isAuth.js';
 const router = express.Router();
 
 router.post(
@@ -18,4 +19,20 @@ router.post(
   errorHandler,
   insertingHospitalDetails
 );
+
+router.post(
+  '/add_hospital_details',
+  [
+
+  ],
+  errorHandler,
+)
+
+router.get(
+  '/get_hospital_details_by_id',
+  errorHandler,
+  isAuthenticated,
+  getHospitalDetails
+)
+
 export default router;

@@ -40,3 +40,35 @@ export const insertingHospitalDetails = async(req, res,next)=>{
   }
 }
 
+// export const addingDetails = async (req,res,next)=>{
+//   try{
+//      const {
+       
+//      }
+
+//   }catch(err){
+//     next(err);
+//   }
+// }
+
+
+export const getHospitalDetails = async (req,res,next)=>{
+  try{
+    const id = req.hospitalId;
+    const hospital = await HospitalModel.findById(id).populate('hospitalDetails').select('-hospitalPassword -otp -expTime');
+    if(!hospital){
+      return res.status(200).json({
+        status:false,
+        message: "Hospital not found",
+        data:''
+      })
+    }
+    return res.status(200).json({
+      status:true,
+      message:"Success",
+      data:hospital
+    })
+  }catch(err){
+    next(err);
+  }
+}

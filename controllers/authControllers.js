@@ -10,14 +10,14 @@ import Jwt from "jsonwebtoken";
 export const signupController = async (req, res, next) => {
   try {
     const { hospitalEmail, hospitalPassword , hospitalConfirmPassword } = req.body;
-    
     if(hospitalConfirmPassword !== hospitalPassword){
       return res.status(401).json({
         status:false,
-        message:"Confirm password",
+        message:"Confirm password no matched",
         data:''
       })
     }
+
     let loginBody = {};
     if (hospitalEmail) {
       loginBody.hospitalEmail = hospitalEmail;
@@ -50,7 +50,7 @@ export const signupController = async (req, res, next) => {
 
     if (!mail) {
       return res.status(500).json({
-        status: true,
+        status: false,
         message: "Something went wrong ,could not send mail",
         data: "",
       });
