@@ -53,6 +53,10 @@ export const getHospitalDetails = async (req, res, next) => {
     const body = {};
     body.hospitalId = hospital._id;
     body.hospitalDetailsId = hospital.hospitalDetails._id;
+    
+    if(hospital.hospitalDetails.hospitalName){
+      body.hospitalName = hospital.hospitalDetails.hospitalName;
+    }
     body.hospitalEmail = hospital.hospitalEmail;
     if (hospital.hospitalDetails.beds) {
       body.beds = hospital.hospitalDetails.beds;
