@@ -7,7 +7,9 @@ import {
   verifyOTP,
   forgetPassword,
   forgetPasswordChange,
+  passwordChange,
 } from "../controllers/authControllers.js";
+import { isAuthenticated } from "../middlewares/isAuth.js";
 const router = express.Router();
 
 router.post(
@@ -56,6 +58,18 @@ router.post(
   ],
   errorHandler,
   loginHospital
+);
+
+router.post(
+  "/password_change",
+  [
+    body("id").notEmpty().withMessage("invalid id"),
+    body("hospitalPassword").isStrongPassword().withMessage("password is weak"),
+    body("newPassword").isStrongPassword().withMessage("New password is weak"),
+  ],
+  errorHandler,
+  isAuthenticated,
+  passwordChange
 );
 
 export default router;
