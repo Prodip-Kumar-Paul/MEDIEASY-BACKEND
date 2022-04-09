@@ -14,7 +14,6 @@ const DetailsSchema = new Schema(
     hospitalId: {
       type: Schema.Types.ObjectId,
       ref: "Hospital",
-      default:""
     },
     hospitalAddress: {
       type: String,
@@ -23,7 +22,6 @@ const DetailsSchema = new Schema(
     beds: {
       type: Schema.Types.ObjectId,
       ref: "Bed",
-      default:"",
     },
     availableOperations: [
       {type:String}
@@ -43,12 +41,10 @@ const DetailsSchema = new Schema(
     blood: {
       type: Schema.Types.ObjectId,
       ref: "Blood",
-      default:"",
     },
     vaccine: {
       type: Schema.Types.ObjectId,
       ref: "Vaccine",
-      default:"",
     },
     ambulanceAvailability: {
       type: Boolean,

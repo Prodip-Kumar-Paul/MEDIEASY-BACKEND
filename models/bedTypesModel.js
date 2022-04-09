@@ -5,11 +5,9 @@ const BedTypeSchema = new Schema(
   {
     types:{
       type:String,
-      default:null,
     },
     description:{
       type:String,
-      default:null,
     },
     isDeleted: {
       type: Boolean,
