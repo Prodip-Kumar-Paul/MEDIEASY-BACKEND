@@ -6,6 +6,8 @@ import {
   getHospitalDetails,
   updatingHospitalDetails,
 } from "../controllers/hospitalDetailsController.js";
+
+import {getBedTypes } from '../controllers/bedController.js';
 import { isAuthenticated } from "../middlewares/isAuth.js";
 
 const router = express.Router();
@@ -38,3 +40,11 @@ router.post(
   updatingHospitalDetails
 );
 export default router;
+
+
+router.get(
+  '/all_bed_types',
+  errorHandler,
+  isAuthenticated,
+  getBedTypes,
+)

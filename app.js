@@ -21,7 +21,7 @@ import hospitalApis from "./apis/hospitalApis.js";
 import hospitalDetailsApis from './apis/hospitalDetailsApi.js';
 
 import searchPlaceApis from "./apis/placeSearchApis.js";
-
+import {autoCreateBed} from './utils/autoCreatetypes.js'
 //app  and middleware
 const app = express();
 app.use(cors());
@@ -73,6 +73,8 @@ const limiter = rateLimit({
   message: "Too many requests from this IP, please try again in an hour!",
 });
 app.use(limiter);
+
+autoCreateBed();
 
 app.use("/api/v1/test", testApis);
 app.use("/api/v1/auth", authApis);

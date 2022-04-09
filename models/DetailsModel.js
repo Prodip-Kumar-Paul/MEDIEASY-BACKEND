@@ -19,10 +19,12 @@ const DetailsSchema = new Schema(
       type: String,
       default: "",
     },
-    beds: {
-      type: Schema.Types.ObjectId,
-      ref: "Bed",
-    },
+    beds: [
+      {
+        type: String,
+        vacancy: String,
+      },
+    ],
     availableOperations: [{ type: String }],
     placeId: {
       type: String,
@@ -40,10 +42,7 @@ const DetailsSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Blood",
     },
-    vaccine: {
-      type: Schema.Types.ObjectId,
-      ref: "Vaccine",
-    },
+    vaccine: [{ type: String }],
     ambulanceAvailability: {
       type: Boolean,
       default: true,
