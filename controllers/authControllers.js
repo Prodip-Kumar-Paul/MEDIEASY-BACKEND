@@ -167,7 +167,69 @@ export const loginHospital = async (req, res, next) => {
 
 export const forgetPassword = async (req, res, next) => {
   try {
+    const { id } = req.body;
+    const hospital = await Hospital.findOne({ _id: id });
+    if (!hospital)
+      return res.status(406).json({
+        status: false,
+        message: "Hospital not found",
+        data: [],
+      });
+    const forgetPasswordOtp = genOtp();
+    const currDate = new Date();
+    const expTime = new Date(currDate.getTime() + 30 * 60000);
+
+    hospital.otp = forgetPasswordOtp;
+    hospital.expTime = expTime;
+    await hospital.save();
+
+    const mail = sendMail(
+      hospital.hospitalEmail,
+      "Forget Password",
+      `Your OTP Pin is ${forgetPasswordOtp}, It is valid till one hour`
+    );
+    if (!mail) {
+      return res.status(500).json({
+        status: true,
+        message: "Something went wrong ,could not send mail",
+        data: "",
+      });
+    }
+    return res.status(200).json({
+      status: true,
+      message: "Please verify your email",
+      data: {
+        id: hospital._id,
+      },
+    });
   } catch (err) {
+    next(err);
+  }
+};
+
+export const forgetPasswordChange = async (req, res) => {
+  try {
+    const { id, newPassword } = req.body;
+    const hospital = await Hospital.findOne({ _id: id });
+    if (!hospital)
+      return {
+        status: false,
+        message: "Hospital not found",
+        data: [],
+      };
+    const hashedPassword = await bcryptJs.hash(newPassword, 12);
+
+    hospital.hospitalPassword = hashedPassword;
+
+    await hospital.save();
+
+    return res.status(200).json({
+      status: true,
+      message: "Password changed successfully",
+      data: null,
+    });
+  } catch (error) {
+    console.log(error);
     next(err);
   }
 };
