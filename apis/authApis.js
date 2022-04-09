@@ -63,7 +63,6 @@ router.post(
 router.post(
   "/password_change",
   [
-    body("id").notEmpty().withMessage("invalid id"),
     body("hospitalPassword").isStrongPassword().withMessage("password is weak"),
     body("newPassword").isStrongPassword().withMessage("New password is weak"),
   ],

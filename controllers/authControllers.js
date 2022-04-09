@@ -45,7 +45,6 @@ export const signupController = async (req, res, next) => {
     const expTime = new Date(currDate.getTime() + 30 * 60000);
     loginBody.expTime = expTime;
     const text = emailText(otp);
-    //console.log(text);
 
     const mail = await sendMail(hospitalEmail, "SignUp", "", text);
 
@@ -237,7 +236,8 @@ export const forgetPasswordChange = async (req, res) => {
 
 export const passwordChange = async (req, res, next) => {
   try {
-    const { id, hospitalPassword, newPassword } = req.body;
+    const { hospitalPassword, newPassword } = req.body;
+    const id = req.hospitalId;
     const hospital = await Hospital.findById(id);
     if (!hospital)
       return res.status(406).json({
