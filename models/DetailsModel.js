@@ -6,9 +6,6 @@ const DetailsSchema = new Schema(
     hospitalName: {
       type: String,
     },
-    hospitalNumber: {
-      type: String,
-    },
     hospitalId: {
       type: Schema.Types.ObjectId,
       ref: "Hospital",
@@ -23,9 +20,6 @@ const DetailsSchema = new Schema(
     availableOperations: [
       {type:String}
     ],
-    placeId:{
-      type:String
-    },
     EmergencyAvailability: {
       type: Boolean,
     },
@@ -43,7 +37,7 @@ const DetailsSchema = new Schema(
     ambulanceAvailability: {
       type: Boolean,
     },
-    helpline: {
+    helpLine: {
       type: String,
     },
     isDeleted: {
