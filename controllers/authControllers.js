@@ -9,7 +9,15 @@ import Jwt from "jsonwebtoken";
 
 export const signupController = async (req, res, next) => {
   try {
-    const { hospitalEmail, hospitalPassword } = req.body;
+    const { hospitalEmail, hospitalPassword , hospitalConfirmPassword } = req.body;
+    
+    if(hospitalConfirmPassword !== hospitalPassword){
+      return res.status(401).json({
+        status:false,
+        message:"Confirm password",
+        data:''
+      })
+    }
     let loginBody = {};
     if (hospitalEmail) {
       loginBody.hospitalEmail = hospitalEmail;
