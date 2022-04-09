@@ -112,7 +112,7 @@ export const updatingHospitalDetails = async (req, res, next) => {
       oxygen,
       hospitalNumber,
       vaccine,
-      emergencyAvailability,
+      EmergencyAvailability,
       ambulanceAvailability,
       helpline,
       blood,
@@ -124,8 +124,8 @@ export const updatingHospitalDetails = async (req, res, next) => {
     if (oxygen) body.oxygen = oxygen;
     if (hospitalNumber) body.hospitalNumber = hospitalNumber;
     if (vaccine) body.vaccine = vaccine;
-    if (emergencyAvailability)
-      body.emergencyAvailability = emergencyAvailability;
+    if (EmergencyAvailability !== undefined)
+      body.EmergencyAvailability = EmergencyAvailability;
     if (ambulanceAvailability)
       body.ambulanceAvailability = ambulanceAvailability;
     if (helpline) body.helpline = helpline;
@@ -153,4 +153,12 @@ export const updatingHospitalDetails = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+  console.log(
+    "🚀 ~ file: hospitalDetailsController.js ~ line 160 ~ updatingHospitalDetails ~ body",
+    body
+  );
+  console.log(
+    "🚀 ~ file: hospitalDetailsController.js ~ line 160 ~ updatingHospitalDetails ~ body",
+    body
+  );
 };

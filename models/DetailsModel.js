@@ -32,20 +32,21 @@ const DetailsSchema = new Schema(
     },
     EmergencyAvailability: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     oxygen: {
       type: String,
       default: "",
     },
-    blood: {
-      type: Schema.Types.ObjectId,
-      ref: "Blood",
-    },
+    blood: [
+      {
+        type: String,
+      },
+    ],
     vaccine: [{ type: String }],
     ambulanceAvailability: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     helpline: {
       type: String,
