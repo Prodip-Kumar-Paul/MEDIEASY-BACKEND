@@ -2,19 +2,30 @@ import express from "express";
 import { body } from "express-validator";
 import { errorHandler } from "../utils/errorHandler.js";
 // import { signUpOrLoginController } from "../controllers/authControllers.js";
+import {
+  signupController,
+  loginHospital,
+  verifyOTP,
+} from "../controllers/authControllers.js";
 const router = express.Router();
 
 router.post(
-   "/signup",
-   [
-      body("hospitalName")
-         .notEmpty()
-         .withMessage("Invalid Hospital Name"),
-   ],
-   [body("hospitalEmail").normalizeEmail().isEmail().withMessage("Invalid Email")],
-   [body("hospitalNumber").notEmpty().withMessage("Invalid Number")],
-   [body("hospitalAddress").notEmpty().withMessage("Invalid Address")],
-   errorHandler,
-   signUpOrLoginController
+  "/signup",
+  [
+    body("hospitalEmail")
+      .normalizeEmail()
+      .isEmail()
+      .withMessage("Invalid Email"),
+    body("hospitalPassword").isStrongPassword().withMessage("password is weak"),
+  ],
+  errorHandler,
+  signupController
 );
+router.post(
+  "/verify_otp",
+  [body("otp").notEmpty().withMessage("invalid otp")],
+  errorHandler,
+  verifyOTP
+);
+
 export default router;

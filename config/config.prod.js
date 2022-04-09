@@ -16,6 +16,8 @@ const configProd = {
    DB_PASSWORD: process.env.PROD_DB_PASSWORD,
    EMAIL:process.env.PROD_EMAIL,
    PASSWORD:process.env.PROD_PASSWORD,
+   JWT_ACTIVATE:process.env.PROD_JWT_ACTIVATE,
+   LOCALIQ_API_KEY:process.env.PROD_LOCALIQ_API_KEY
 };
 
 export default configProd;

@@ -1,99 +1,173 @@
-import axios from "axios";
 import Hospital from "../models/HospitalModel.js";
-import apis from "../utils/apis.js";
+import DetailsModel from "../models/DetailsModel.js";
 import config from "../config/config.js";
-import Jwt from "jsonwebtoken";
 import { sendMail } from "../utils/sendEmail.js";
+import genOtp from "../utils/genOtp.js";
+import emailText from "../utils/emailText.js";
+import bcryptJs from "bcryptjs";
+import Jwt from "jsonwebtoken";
 
-// export const registerController = async (req, res, next) => {
-//    try {
-//       console.log("here......");
-//    } catch (err) {
-//       console.log(err);
-//       next(err);
-//    }
-// };
-
-// export const signUpOrLoginController = async (req, res, next) => {
-//    try {
-//       const { userType, email, githubCode } = req.body;
-//       const github = await axios({
-//          method: "post",
-//          url: apis.GITHUB_ACCESS_TOKEN,
-//          data: {
-//             client_id: config.GITHUB_CLIENTID_ID,
-//             client_secret: config.GITHUB_CLIENT_SECRET,
-//             code: githubCode,
-//             redirectUrl: config.GITHUB_REDIRECT_URL,
-//          },
-//       });
-//       const gitData = new URLSearchParams(github.data);
-//       if (gitData.get("error")) {
-//          return res.status(200).json({
-//             message: "Gitub verification Failed",
-//             data: github.data,
-//             status: false,
-//          });
-//       }
-//       const user = await User.find({ email, userType }).lean();
-//       let token;
-//       if (user.length) {
-//          token = jwt.sign(
-//             {
-//                id: user[0]._id.toString(),
-//                type: userType,
-//                githubToken: gitData.get("access_token"),
-//             },
-//             config.JWT_SECRET_KEY,
-//             { expiresIn: "7d" }
-//          );
-//       } else {
-//          const user = new User({
-//             email,
-//             userType,
-//             password: "123",
-//          });
-//          await user.save();
-//          token = jwt.sign(
-//             {
-//                id: user._id.toString(),
-//                type: userType,
-//                githubToken: gitData.get("access_token"),
-//             },
-//             config.JWT_SECRET_KEY,
-//             { expiresIn: "7d" }
-//          );
-//       }
-//       res.status(201).json({
-//          message: "Success",
-//          data: token,
-//          status: true,
-//       });
-//    } catch (err) {
-//       next(err);
-//    }
-// };
-
-export const signupController  = async (req,res,next)=>{
-  try{
-    const {hospitalName ,hospitalEmail, hospitalNumber ,hospitalAddress} = req.body;
-    let body = {};
-    if(hospitalName){
-      body.hospitalName =hospitalName;
-    }
-    if(hospitalEmail){
-      body.hospitalEmail =hospitalEmail
-    } 
-    if(hospitalNumber){
-      body.hospitalNumber =hospitalNumber
-    } 
-    if(hospitalAddress){
-      body.hospitalAddress =hospitalAddress
-    } 
+export const signupController = async (req, res, next) => {
+  try {
+    const { hospitalEmail, hospitalPassword , hospitalConfirmPassword } = req.body;
     
+    if(hospitalConfirmPassword !== hospitalPassword){
+      return res.status(401).json({
+        status:false,
+        message:"Confirm password",
+        data:''
+      })
+    }
+    let loginBody = {};
+    if (hospitalEmail) {
+      loginBody.hospitalEmail = hospitalEmail;
+    }
+    if (hospitalPassword) {
+      const hash = await bcryptJs.hash(hospitalPassword, 12);
+      loginBody.hospitalPassword = hash;
+    }
 
+    const alreadyLoggedIn = await Hospital.findOne({
+      hospitalEmail: hospitalEmail,
+    });
+    if (alreadyLoggedIn) {
+      return res.status(406).json({
+        status: false,
+        message: "You already have an account",
+        data: "",
+      });
+    }
 
-  }catch(error){
-    next(error)
+    const otp = genOtp();
+    loginBody.otp = otp;
+    const currDate = new Date();
+    const expTime = new Date(currDate.getTime() + 30 * 60000);
+    loginBody.expTime = expTime;
+    const text = emailText(otp);
+    //console.log(text);
+
+    const mail = await sendMail(hospitalEmail, "SignUp", "", text);
+
+    if (!mail) {
+      return res.status(500).json({
+        status: true,
+        message: "Something went wrong ,could not send mail",
+        data: "",
+      });
+    }
+    const createHospital = await Hospital.create(loginBody);
+
+    return res.status(200).json({
+      status: true,
+      message: "Please verify your email",
+      data: {
+        id: createHospital._id,
+      },
+    });
+  } catch (error) {
+    next(error);
   }
-}
+};
+
+export const verifyOTP = async (req, res, next) => {
+  try {
+    const { id, otp } = req.body;
+    const hospital = await Hospital.findOne({ _id: id });
+    if (!hospital) {
+      return res.status(200).json({
+        status: false,
+        message: "hospital not found",
+        data: "",
+      });
+    }
+    const currentDate = new Date();
+    const hospitalTime = hospital.expTime;
+    if (hospitalTime < currentDate) {
+      return res.status(200).json({
+        status: false,
+        message: "OTP expired",
+        data: "",
+      });
+    }
+    const actualOtp = hospital.otp;
+    if (actualOtp !== otp) {
+      return res.status(200).json({
+        status: false,
+        message: "OTP does not matched",
+        data: "",
+      });
+    } else {
+      hospital.otp = null;
+      hospital.expTime = null;
+      hospital.verified = true;
+
+      await hospital.save();
+      res.status(200).json({
+        status: true,
+        message: "Otp verified",
+        data: {
+          _id: id,
+        },
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const loginHospital = async (req, res, next) => {
+  try {
+    const { hospitalEmail, hospitalPassword } = req.body;
+    const hospital = await Hospital.findOne({
+      hospitalEmail: hospitalEmail,
+      verified: true,
+      isDeleted: false,
+    });
+    if (!hospital) {
+      return res.status(406).json({
+        status: false,
+        message: "Hospital not found",
+        data: "",
+      });
+    }
+    const matchedPassword = await bcryptJs.compare(
+      hospitalPassword,
+      hospital.hospitalPassword
+    );
+
+    if (!matchedPassword) {
+      return res.status(406).json({
+        status: false,
+        message: "Invalid Password",
+        data: "",
+      });
+    }
+
+    const token = Jwt.sign({ hospitalId: hospital._id }, config.JWT_ACTIVATE, {
+      expiresIn: "7d",
+    });
+    const loginDetails = { ...hospital._doc };
+
+    delete loginDetails.hospitalPassword;
+    delete loginDetails.otp;
+    delete loginDetails.expTime;
+
+    return res.status(200).json({
+      status: true,
+      message: "Welcome.....",
+      data: {
+        token: token,
+        loginDetails,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const forgetPassword = async (req, res, next) => {
+  try {
+  } catch (err) {
+    next(err);
+  }
+};
