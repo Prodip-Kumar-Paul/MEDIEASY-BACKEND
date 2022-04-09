@@ -60,7 +60,7 @@ export const getHospitalDetails = async (req, res, next) => {
     if (hospital.hospitalDetails.availableOperations) {
       body.availableOperations = hospital.hospitalDetails.availableOperations;
     }
-    if (placeId) {
+    if (hospital.hospitalDetails.placeId) {
       body.placeId = hospital.hospitalDetails.placeId;
     }
     if (hospital.hospitalDetails.placeId) {
