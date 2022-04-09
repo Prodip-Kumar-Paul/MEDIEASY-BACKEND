@@ -86,6 +86,10 @@ export const getHospitalDetails = async (req, res, next) => {
       body.ambulanceAvailability =
         hospital.hospitalDetails.ambulanceAvailability;
     }
+    if (hospital.hospitalDetails.hospitalAddress) {
+      body.hospitalAddress =
+        hospital.hospitalDetails.hospitalAddress;
+    }
     if (!hospital) {
       return res.status(200).json({
         status: false,
