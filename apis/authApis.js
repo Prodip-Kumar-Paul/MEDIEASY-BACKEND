@@ -1,7 +1,6 @@
 import express from "express";
 import { body } from "express-validator";
 import { errorHandler } from "../utils/errorHandler.js";
-// import { signUpOrLoginController } from "../controllers/authControllers.js";
 import {
   signupController,
   loginHospital,
@@ -44,6 +43,19 @@ router.post(
   ],
   errorHandler,
   forgetPasswordChange
+);
+
+router.post(
+  "/login",
+  [
+    body("hospitalEmail")
+      .normalizeEmail()
+      .isEmail()
+      .withMessage("Invalid Email"),
+    body("hospitalPassword").isStrongPassword().withMessage("Invalid password"),
+  ],
+  errorHandler,
+  loginHospital
 );
 
 export default router;
