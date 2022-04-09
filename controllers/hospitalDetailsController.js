@@ -53,8 +53,8 @@ export const getHospitalDetails = async (req, res, next) => {
     const body = {};
     body.hospitalId = hospital._id;
     body.hospitalDetailsId = hospital.hospitalDetails._id;
-    
-    if(hospital.hospitalDetails.hospitalName){
+
+    if (hospital.hospitalDetails.hospitalName) {
       body.hospitalName = hospital.hospitalDetails.hospitalName;
     }
     body.hospitalEmail = hospital.hospitalEmail;
@@ -87,8 +87,7 @@ export const getHospitalDetails = async (req, res, next) => {
         hospital.hospitalDetails.ambulanceAvailability;
     }
     if (hospital.hospitalDetails.hospitalAddress) {
-      body.hospitalAddress =
-        hospital.hospitalDetails.hospitalAddress;
+      body.hospitalAddress = hospital.hospitalDetails.hospitalAddress;
     }
     if (!hospital) {
       return res.status(200).json({
@@ -109,42 +108,35 @@ export const getHospitalDetails = async (req, res, next) => {
 
 export const updatingHospitalDetails = async (req, res, next) => {
   try {
-    console.log("dfdfdf");
     const {
-      id,
-      hospitalId,
-      name,
-      address,
-      phoneNo,
-      beds,
-      emergencyAvailability,
       oxygen,
-      blood,
+      hospitalNumber,
       vaccine,
+      emergencyAvailability,
       ambulanceAvailability,
-      availableOperations,
       helpline,
+      blood,
+      bed,
     } = req.body;
+    const id = req.hospitalId;
     const body = {};
 
-    if (name) body.hospitalName = name;
-    if (address) body.hospitalAddress = address;
-    if (phoneNo) body.hospitalNumber = phoneNo;
+    if (oxygen) body.oxygen = oxygen;
+    if (hospitalNumber) body.hospitalNumber = hospitalNumber;
+    if (vaccine) body.vaccine = vaccine;
     if (emergencyAvailability)
       body.emergencyAvailability = emergencyAvailability;
-    if (oxygen) body.oxygen = oxygen;
     if (ambulanceAvailability)
       body.ambulanceAvailability = ambulanceAvailability;
-
     if (helpline) body.helpline = helpline;
-    if (availableOperations) body.availableOperations = availableOperations;
-    if (hospitalId) body.hospitalId = hospitalId;
-    if (beds) body.beds = beds;
     if (blood) body.blood = blood;
-    if (vaccine) body.vaccine = vaccine;
-    console.log(body);
-    const hospital = await DetailsModel.findByIdAndUpdate(id, { ...body });
-    console.log(hospital, "llklk");
+    if (bed) body.bed = bed;
+
+    const hospital = await DetailsModel.findOneAndUpdate(
+      { hospitalId: id },
+      { ...body }
+    ).populate("hospitalId");
+
     if (!hospital) {
       return res.status(406).json({
         status: false,
