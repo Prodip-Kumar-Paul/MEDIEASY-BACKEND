@@ -1,5 +1,5 @@
 import Jwt from "jsonwebtoken";
-import config from "../config/config";
+import config from "../config/config.js";
 
 export const isAuthenticated = async (req, res, next) => {
   try {
@@ -11,9 +11,9 @@ export const isAuthenticated = async (req, res, next) => {
       throw error;
     }
     const token = req.get("Authorization").split(" ")[1];
-
+    console.log(token);
     const decoded = Jwt.verify(token, config.JWT_ACTIVATE);
-
+    console.log(decoded);
     if (!decoded) {
       res.status(401).json({
         status: false,

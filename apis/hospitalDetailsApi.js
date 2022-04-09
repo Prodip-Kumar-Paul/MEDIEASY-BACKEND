@@ -1,11 +1,13 @@
 import express from "express";
-import { body, check } from "express-validator";
+import { body} from "express-validator";
 import { errorHandler } from "../utils/errorHandler.js";
-// import { signUpOrLoginController } from "../controllers/authControllers.js";
 import {
   insertingHospitalDetails,
+  getHospitalDetails,
   updatingHospitalDetails,
 } from "../controllers/hospitalDetailsController.js";
+import { isAuthenticated } from "../middlewares/isAuth.js";
+
 const router = express.Router();
 
 router.post(
@@ -21,6 +23,14 @@ router.post(
   errorHandler,
   insertingHospitalDetails
 );
+
+router.get(
+  "/get_hospital_details_by_id",
+  errorHandler,
+  isAuthenticated,
+  getHospitalDetails
+);
+
 router.post(
   "/update_hospital_details",
   [
@@ -54,6 +64,7 @@ router.post(
       .withMessage("Invalid availableOperations"),
   ],
   errorHandler,
+  isAuthenticated,
   updatingHospitalDetails
 );
 export default router;

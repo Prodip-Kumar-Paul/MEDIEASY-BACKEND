@@ -38,8 +38,30 @@ export const insertingHospitalDetails = async (req, res, next) => {
   }
 };
 
+
+export const getHospitalDetails = async (req,res,next)=>{
+  try{
+    const id = req.hospitalId;
+    const hospital = await HospitalModel.findById(id).populate('hospitalDetails').select('-hospitalPassword -otp -expTime');
+    if(!hospital){
+      return res.status(200).json({
+        status:false,
+        message: "Hospital not found",
+        data:''
+      })
+    }
+    return res.status(200).json({
+      status:true,
+      message:"Success",
+      data:hospital
+    })
+  }catch(err){
+    next(err);
+  }
+}
 export const updatingHospitalDetails = async (req, res, next) => {
   try {
+    console.log("dfdfdf");
     const {
       id,
       hospitalId,
@@ -65,18 +87,19 @@ export const updatingHospitalDetails = async (req, res, next) => {
     if (oxygen) body.oxygen = oxygen;
     if (ambulanceAvailability)
       body.ambulanceAvailability = ambulanceAvailability;
+
     if (helpline) body.helpline = helpline;
     if (availableOperations) body.availableOperations = availableOperations;
     if (hospitalId) body.hospitalId = hospitalId;
     if (beds) body.beds = beds;
     if (blood) body.blood = blood;
     if (vaccine) body.vaccine = vaccine;
-
+    console.log(body);
     const hospital = await DetailsModel.findByIdAndUpdate(
       id,
-      { ...body },
-      { new: true }
+      { ...body }
     );
+    console.log(hospital ,"llklk");
     if (!hospital) {
       return res.status(406).json({
         status: false,
@@ -91,7 +114,6 @@ export const updatingHospitalDetails = async (req, res, next) => {
       });
     }
   } catch (err) {
-    console.log(error);
     next(err);
   }
 };
