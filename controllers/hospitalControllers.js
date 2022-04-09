@@ -1,4 +1,4 @@
-import Hospital from "../models/HospitalModel.js";
+import Hospital from "../models/DetailsModel.js";
 import config from "../config/config.js";
 import apis from "../utils/apis.js";
 import axios from "axios";
@@ -33,7 +33,7 @@ export const getAvailableHospitals = async (req, res, next) => {
     const { lat, lon, radius } = req.body;
     try {
       const hospitals = await axios.get(
-        `https://us1.locationiq.com/v1/nearby.php?key=${process.env.LOCALIQ_API_KEY}&lat=${lat}&lon=${lon}&radius=${radius}&tag=hospital`
+        `https://us1.locationiq.com/v1/nearby.php?key=${config.LOCALIQ_API_KEY}&lat=${lat}&lon=${lon}&radius=${radius}&tag=hospital`
       );
       const getAvailableHospitalsObj = [];
       const getUnavailableHospitals = [];

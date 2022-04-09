@@ -16,12 +16,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 import testApis from "./apis/testApis.js";
-<<<<<<< HEAD
 import authApis from "./apis/authApis.js";
-=======
 import hospitalApis from "./apis/hospitalApis.js";
-// import authApis from "./apis/authApis.js";
->>>>>>> 92fbcbd89c5c1105b6f031d33edca55280f04b92
+
 
 //app  and middleware
 const app = express();
@@ -77,7 +74,6 @@ app.use(limiter);
 
 app.use("/api/v1/test", testApis);
 app.use("/api/v1/auth", authApis);
-// app.use("/api/v1/auth", authApis);
 app.use("/api/v1/hospital", hospitalApis);
 
 // ERROR HANDLING MIDDLEWARE

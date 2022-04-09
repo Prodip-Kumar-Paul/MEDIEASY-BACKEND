@@ -6,10 +6,6 @@ const hospitalSchema = new Schema(
     hospitalEmail: {
       type: String,
     },
-    placeId: { type: String },
-    hospitalNumber: {
-      type: Number,
-    },
     location: {
       type: Object,
     },
