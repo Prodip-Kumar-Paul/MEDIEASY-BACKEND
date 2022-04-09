@@ -8,6 +8,7 @@ const errorHandler = (req, res, next) => {
       if (!errors.isEmpty()) {
          res.status(200).json({
             type: 0,
+            status:false,
             message: "invalid inputs",
             errors: errors.array().map(({ msg, param }) => {
                return {
