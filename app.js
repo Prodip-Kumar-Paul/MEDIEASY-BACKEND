@@ -18,6 +18,8 @@ const __dirname = dirname(__filename);
 import testApis from "./apis/testApis.js";
 import authApis from "./apis/authApis.js";
 import hospitalApis from "./apis/hospitalApis.js";
+import hospitalDetailsApis from './apis/hospitalDetailsApi.js';
+
 import searchPlaceApis from "./apis/placeSearchApis.js";
 
 //app  and middleware
@@ -75,6 +77,7 @@ app.use(limiter);
 app.use("/api/v1/test", testApis);
 app.use("/api/v1/auth", authApis);
 app.use("/api/v1/hospital", hospitalApis);
+app.use("/api/v1/details", hospitalDetailsApis);
 app.use("/api/v1/search_place", searchPlaceApis);
 
 // ERROR HANDLING MIDDLEWARE
