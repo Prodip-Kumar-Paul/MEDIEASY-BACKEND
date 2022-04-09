@@ -6,6 +6,7 @@ const hospitalSchema = new Schema(
     hospitalEmail: {
       type: String,
     },
+    placeId: { type: String },
     hospitalNumber: {
       type: Number,
     },
@@ -22,7 +23,7 @@ const hospitalSchema = new Schema(
     otp:{
       type:String,
     },
-    expTime:{
+    expTime: {
       type: Date,
     },
     verified:{
