@@ -38,27 +38,67 @@ export const insertingHospitalDetails = async (req, res, next) => {
   }
 };
 
-
-export const getHospitalDetails = async (req,res,next)=>{
-  try{
+export const getHospitalDetails = async (req, res, next) => {
+  try {
     const id = req.hospitalId;
-    const hospital = await HospitalModel.findById(id).populate('hospitalDetails').select('-hospitalPassword -otp -expTime');
-    if(!hospital){
+    const hospital = await HospitalModel.findOne({
+      _id: id,
+      isDeleted: false,
+      verified: true,
+    })
+      .populate("hospitalDetails")
+      .select(
+        "-hospitalPassword -otp -expTime -isDeleted -createdAt -updatedAt -verified"
+      );
+    const body = {};
+    body.hospitalId = hospital._id;
+    body.hospitalDetailsId = hospital.hospitalDetails._id;
+    body.hospitalEmail = hospital.hospitalEmail;
+    if (hospital.hospitalDetails.beds) {
+      body.beds = hospital.hospitalDetails.beds;
+    }
+    if (hospital.hospitalDetails.availableOperations) {
+      body.availableOperations = hospital.hospitalDetails.availableOperations;
+    }
+    if (placeId) {
+      body.placeId = hospital.hospitalDetails.placeId;
+    }
+    if (hospital.hospitalDetails.placeId) {
+      body.placeId = hospital.hospitalDetails.placeId;
+    }
+    if (hospital.hospitalDetails.helpline) {
+      body.helpline = hospital.hospitalDetails.helpline;
+    }
+    if (hospital.hospitalDetails.blood) {
+      body.blood = hospital.hospitalDetails.blood;
+    }
+    if (hospital.hospitalDetails.vaccine) {
+      body.vaccine = hospital.hospitalDetails.vaccine;
+    }
+    if (hospital.hospitalDetails.oxygen) {
+      body.oxygen = hospital.hospitalDetails.oxygen;
+    }
+    if (hospital.hospitalDetails.ambulanceAvailability) {
+      body.ambulanceAvailability =
+        hospital.hospitalDetails.ambulanceAvailability;
+    }
+    if (!hospital) {
       return res.status(200).json({
-        status:false,
+        status: false,
         message: "Hospital not found",
-        data:''
-      })
+        data: "",
+      });
     }
     return res.status(200).json({
-      status:true,
-      message:"Success",
-      data:hospital
-    })
-  }catch(err){
+      status: true,
+      message: "Success",
+      data: body,
+    });
+  } catch (err) {
     next(err);
   }
-}
+};
+
 export const updatingHospitalDetails = async (req, res, next) => {
   try {
     console.log("dfdfdf");
@@ -95,11 +135,8 @@ export const updatingHospitalDetails = async (req, res, next) => {
     if (blood) body.blood = blood;
     if (vaccine) body.vaccine = vaccine;
     console.log(body);
-    const hospital = await DetailsModel.findByIdAndUpdate(
-      id,
-      { ...body }
-    );
-    console.log(hospital ,"llklk");
+    const hospital = await DetailsModel.findByIdAndUpdate(id, { ...body });
+    console.log(hospital, "llklk");
     if (!hospital) {
       return res.status(406).json({
         status: false,
