@@ -12,6 +12,7 @@ const BloodSchema = new Schema(
     hospitalId: {
       type: Schema.Types.ObjectId,
       ref: "Hospital",
+      default:null
     },
     isDeleted: {
       type: Boolean,

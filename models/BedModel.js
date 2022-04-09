@@ -9,10 +9,12 @@ const BedSchema = new Schema(
     },
     vacancy:{
       type:String,
+      default:"zero"
     },
     hospitalId:{
       type:Schema.Types.ObjectId,
-      ref:"Hospital"
+      ref:"Hospital",
+      default:null
     },
     isDeleted: {
       type: Boolean,
