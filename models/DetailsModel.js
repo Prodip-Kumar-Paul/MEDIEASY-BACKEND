@@ -5,11 +5,11 @@ const DetailsSchema = new Schema(
   {
     hospitalName: {
       type: String,
-      default:""
+      default: "",
     },
     hospitalNumber: {
       type: String,
-      default:""
+      default: "",
     },
     hospitalId: {
       type: Schema.Types.ObjectId,
@@ -17,41 +17,40 @@ const DetailsSchema = new Schema(
     },
     hospitalAddress: {
       type: String,
-      default:""
+      default: "",
     },
-    beds:[{
-      type:String,
-      vacancy:String,
-    }],
-    availableOperations: [
-      {type:String}
+    beds: [
+      {
+        type: String,
+        vacancy: String,
+      },
     ],
-    placeId:{
-      type:String,
-      default:"",
+    availableOperations: [{ type: String }],
+    placeId: {
+      type: String,
+      default: "",
     },
     EmergencyAvailability: {
       type: Boolean,
-      default:true,
+      default: false,
     },
     oxygen: {
       type: String,
-      default:"",
+      default: "",
     },
-    blood: {
-      type: Schema.Types.ObjectId,
-      ref: "Blood",
-    },
-    vaccine:[
-     {type:String}
+    blood: [
+      {
+        type: String,
+      },
     ],
+    vaccine: [{ type: String }],
     ambulanceAvailability: {
       type: Boolean,
-      default:true,
+      default: false,
     },
     helpline: {
       type: String,
-      default:"",
+      default: "",
     },
     isDeleted: {
       type: Boolean,
