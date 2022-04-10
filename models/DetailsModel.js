@@ -21,8 +21,8 @@ const DetailsSchema = new Schema(
     },
     beds: [
       {
-        type: String,
-        vacancy: String,
+        type: { type: String },
+        vacancy: { type: String },
       },
     ],
     availableOperations: [{ type: String }],

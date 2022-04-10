@@ -116,7 +116,7 @@ export const updatingHospitalDetails = async (req, res, next) => {
       ambulanceAvailability,
       helpline,
       blood,
-      bed,
+      beds,
     } = req.body;
     const id = req.hospitalId;
     const body = {};
@@ -130,7 +130,7 @@ export const updatingHospitalDetails = async (req, res, next) => {
       body.ambulanceAvailability = ambulanceAvailability;
     if (helpline) body.helpline = helpline;
     if (blood) body.blood = blood;
-    if (bed) body.bed = bed;
+    if (beds) body.beds = beds;
 
     const hospital = await DetailsModel.findOneAndUpdate(
       { hospitalId: id },
@@ -153,12 +153,4 @@ export const updatingHospitalDetails = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-  console.log(
-    "🚀 ~ file: hospitalDetailsController.js ~ line 160 ~ updatingHospitalDetails ~ body",
-    body
-  );
-  console.log(
-    "🚀 ~ file: hospitalDetailsController.js ~ line 160 ~ updatingHospitalDetails ~ body",
-    body
-  );
 };
