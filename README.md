@@ -13,7 +13,7 @@
   - [Huge Shoutout to](#huge-shoutout-to)
   - [Tech Stack](#tech-stack)
   - [Used Location API](#used-location-api)
-  - [Why not GOOGLE MAPS API](#why-not-google-maps-api)
+  - [Why not GOOGLE MAPS API ?](#why-not-google-maps-api)
   - [Next Steps](#next-steps)
   - [Contributers](#contributers)
   - [Feel Free to Contribute](#feel-free-to-contribute)
