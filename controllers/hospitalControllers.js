@@ -37,29 +37,39 @@ export const getAvailableHospitals = async (req, res, next) => {
       const hospitals = await axios.get(
         `https://us1.locationiq.com/v1/nearby.php?key=${config.LOCALIQ_API_KEY}&lat=${lat}&lon=${lon}&radius=${radius}&tag=hospital`
       );
-      const getAvailableHospitalsObj = [];
-      const getUnavailableHospitals = [];
+      let getAvailableHospitalsObj = [];
+      let getUnavailableHospitals = [];
 
-      hospitals.data.map(async (hospital) => {
-        const { place_id } = hospital;
-        try {
+      await Promise.all(
+        hospitals.data.map(async (hospital) => {
+          const { osm_id } = hospital;
+          // try {
           const getHospitalByPlaceId = await Details.findOne({
-            placeId: place_id,
+            placeId: osm_id,
           }).populate("hospitalId");
-          if (getHospitalByPlaceId)
-            getAvailableHospitalsObj.push(getHospitalByPlaceId);
-          getUnavailableHospitals.push(getHospitalByPlaceId);
-        } catch (error) {
-          console.log(error);
-          res.status(500).json({
-            status: false,
-            message: "Hospital search Error!",
-          });
-        }
-      });
+          if (getHospitalByPlaceId) {
+            getAvailableHospitalsObj.push(hospital);
+          } else {
+            getUnavailableHospitals.push(hospital);
+          }
+          // } catch (error) {
+          //   console.log(error);
+          //   res.status(500).json({
+          //     status: false,
+          //     message: "Hospital search Error!",
+          //   });
+          // }
+        })
+      );
+
       return res.status(200).json({
         status: true,
-        data: [getAvailableHospitalsObj, getUnavailableHospitals],
+        data: [
+          {
+            getAvailableHospitalsObj,
+            getUnavailableHospitals,
+          },
+        ],
         message: "Success",
       });
     } catch (error) {
