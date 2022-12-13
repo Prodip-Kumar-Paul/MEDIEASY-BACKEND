@@ -2,7 +2,9 @@ import Config from '../config/config.js';
 import nodemailer from 'nodemailer';
 //create transporter
 let transporter = nodemailer.createTransport({
-  service:"Gmail",
+  host:"mail.mail.com",
+  port: 587,
+  secure: false,
   auth: {
     user: Config.EMAIL,
     pass: Config.PASSWORD,
