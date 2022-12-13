@@ -2,7 +2,7 @@ import Config from '../config/config.js';
 import nodemailer from 'nodemailer';
 //create transporter
 let transporter = nodemailer.createTransport({
-  host:"mail.mail.com",
+  host:"smtp.mail.com",
   port: 587,
   secure: false,
   auth: {
